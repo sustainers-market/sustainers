@@ -1,0 +1,22 @@
+{
+  "name": "@sustainers/errors",
+  "version": "0.0.13",
+  "description": "A library of errors that can be thrown by the market.",
+  "main": "index.js",
+  "author": "sustainers.market",
+  "engines": {
+    "node": ">= 10.16.0"
+  },
+  "scripts": {
+    "test": "mocha --recursive"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@blossm/errors": "*"
+  },
+  "devDependencies": {
+    "mocha": "^6.1.4"
+  }
+}
