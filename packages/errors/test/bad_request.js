@@ -63,7 +63,7 @@ describe("Bad request", () => {
     });
   });
   it("sustainerReactivatingValidation correct", () => {
-    const error = badRequest.sustainerDeactivatingValidation();
+    const error = badRequest.sustainerReactivatingValidation();
     expect(error.toJSON()).to.deep.equal({
       statusCode: 400,
       code: "BadRequest",
@@ -82,7 +82,7 @@ describe("Bad request", () => {
     });
   });
   it("sustainerSuspendingValidation correct", () => {
-    const error = badRequest.sustainerDeactivatingValidation();
+    const error = badRequest.sustainerSuspendingValidation();
     expect(error.toJSON()).to.deep.equal({
       statusCode: 400,
       code: "BadRequest",
