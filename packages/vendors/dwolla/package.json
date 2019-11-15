@@ -1,6 +1,6 @@
 {
   "name": "@blossm/dwolla-payments",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Payment functionality.",
   "main": "index.js",
   "author": "blossm.network",
@@ -14,14 +14,14 @@
     "test": "mocha --recursive"
   },
   "dependencies": {
-    "dwolla-v2": "^3.1.0",
-    "@sustainers/errors": "*"
+    "@sustainers/errors": "^0.0.14",
+    "dwolla-v2": "^3.1.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "common-tags": "^1.8.0",
     "mocha": "^6.1.4",
     "sinon": "^7.3.2",
-    "sinon-chai": "^3.3.0",
-    "common-tags": "^1.8.0"
+    "sinon-chai": "^3.3.0"
   }
 }
