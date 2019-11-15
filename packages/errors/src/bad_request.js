@@ -9,6 +9,30 @@ module.exports = {
         info
       }
     ),
+  sustainerDeactivatingValidation: ({ cause, info } = {}) =>
+    badRequest.message(
+      "Some information was missing when deactivating this account.",
+      {
+        cause,
+        info
+      }
+    ),
+  sustainerReactivatingValidation: ({ cause, info } = {}) =>
+    badRequest.message(
+      "Some information was missing when reactivating this account.",
+      {
+        cause,
+        info
+      }
+    ),
+  sustainerSuspendingValidation: ({ cause, info } = {}) =>
+    badRequest.message(
+      "Some information was missing when suspending this account.",
+      {
+        cause,
+        info
+      }
+    ),
   sustainerCreatingValidation: ({ cause, info } = {}) =>
     badRequest.message(
       "Some information was missing when creating this account.",

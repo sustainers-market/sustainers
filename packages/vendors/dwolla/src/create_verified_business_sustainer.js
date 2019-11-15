@@ -69,7 +69,7 @@ module.exports = dwolla => async (
         businessName,
         businessType,
         businessClassification,
-        ...(doesRequireEin && { ein }),
+        ...((ein || doesRequireEin) && { ein }),
         ...(website && { website }),
         ...(phone && { phone }),
         ...(doesRequireController && {

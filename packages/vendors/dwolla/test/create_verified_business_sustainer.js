@@ -42,131 +42,9 @@ const controllerCountry = "some-countroller-country";
 
 const idempotencyKey = "some-idempotency-key";
 
-describe("Dwolla create sustainer", () => {
+describe("Dwolla create verified business sustainer", () => {
   afterEach(() => {
     restore();
-  });
-  it("it should post correctly", async () => {
-    const responseBody = "some-response-body";
-    const response = {
-      body: responseBody
-    };
-    const postFake = fake.returns(response);
-    const dwollaClient = {
-      post: postFake
-    };
-    const dwollaFake = fake.returns(dwollaClient);
-    replace(deps, "dwolla", dwollaFake);
-
-    const result = await dwolla(key, secret, {
-      environment
-    }).createSustainer({
-      firstName,
-      lastName,
-      email,
-      ipAddress
-    });
-
-    expect(result).to.equal(responseBody);
-    expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
-    expect(postFake).to.have.been.calledWith("customers", {
-      firstName,
-      lastName,
-      email,
-      ipAddress
-    });
-  });
-  it("it should post correctly with idempotency key", async () => {
-    const responseBody = "some-response-body";
-    const response = {
-      body: responseBody
-    };
-    const postFake = fake.returns(response);
-    const dwollaClient = {
-      post: postFake
-    };
-    const dwollaFake = fake.returns(dwollaClient);
-    replace(deps, "dwolla", dwollaFake);
-
-    const result = await dwolla(key, secret, {
-      environment
-    }).createSustainer(
-      {
-        firstName,
-        lastName,
-        email,
-        ipAddress
-      },
-      { idempotencyKey }
-    );
-
-    expect(result).to.equal(responseBody);
-    expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
-    expect(postFake).to.have.been.calledWith(
-      "customers",
-      {
-        firstName,
-        lastName,
-        email,
-        ipAddress
-      },
-      { "Idempotency-Key": idempotencyKey }
-    );
-  });
-  it("it should post correctly with type personal", async () => {
-    const responseBody = "some-response-body";
-    const response = {
-      body: responseBody
-    };
-    const postFake = fake.returns(response);
-    const dwollaClient = {
-      post: postFake
-    };
-    const dwollaFake = fake.returns(dwollaClient);
-    replace(deps, "dwolla", dwollaFake);
-
-    const result = await dwolla(key, secret, {
-      environment
-    }).createSustainer(
-      {
-        firstName,
-        lastName,
-        email,
-        ipAddress,
-        type: "personal",
-        dateOfBirth,
-        ssn,
-        address1,
-        address2,
-        city,
-        state,
-        postalCode,
-        phone
-      },
-      { idempotencyKey }
-    );
-
-    expect(result).to.equal(responseBody);
-    expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
-    expect(postFake).to.have.been.calledWith(
-      "customers",
-      {
-        firstName,
-        lastName,
-        email,
-        ipAddress,
-        type: "personal",
-        dateOfBirth,
-        ssn,
-        address1,
-        address2,
-        city,
-        state,
-        postalCode,
-        phone
-      },
-      { "Idempotency-Key": idempotencyKey }
-    );
   });
   it("it should post correctly with type business sole-prop", async () => {
     const responseBody = "some-response-body";
@@ -182,7 +60,7 @@ describe("Dwolla create sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createSustainer(
+    }).createVerifiedBusinessSustainer(
       {
         firstName,
         lastName,
@@ -229,6 +107,63 @@ describe("Dwolla create sustainer", () => {
         ein,
         website,
         phone
+      },
+      { "Idempotency-Key": idempotencyKey }
+    );
+  });
+  it("it should post correctly with type business sole-prop with no optionals", async () => {
+    const responseBody = "some-response-body";
+    const response = {
+      body: responseBody
+    };
+    const postFake = fake.returns(response);
+    const dwollaClient = {
+      post: postFake
+    };
+    const dwollaFake = fake.returns(dwollaClient);
+    replace(deps, "dwolla", dwollaFake);
+
+    const result = await dwolla(key, secret, {
+      environment
+    }).createVerifiedBusinessSustainer(
+      {
+        firstName,
+        lastName,
+        email,
+        ipAddress,
+        type: "business",
+        dateOfBirth,
+        ssn,
+        address1,
+        city,
+        state,
+        postalCode,
+        businessName,
+        businessType: "soleProprietorship",
+        businessClassification
+      },
+      { idempotencyKey }
+    );
+
+    expect(result).to.equal(responseBody);
+    expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
+    expect(postFake).to.have.been.calledWith(
+      "customers",
+      {
+        firstName,
+        lastName,
+        email,
+        ipAddress,
+        type: "business",
+        dateOfBirth,
+        ssn,
+        address1,
+        city,
+        state,
+        postalCode,
+        businessName,
+        businessType: "soleProprietorship",
+        businessClassification
       },
       { "Idempotency-Key": idempotencyKey }
     );
@@ -247,7 +182,7 @@ describe("Dwolla create sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createSustainer(
+    }).createVerifiedBusinessSustainer(
       {
         firstName,
         lastName,
@@ -313,7 +248,7 @@ describe("Dwolla create sustainer", () => {
       { "Idempotency-Key": idempotencyKey }
     );
   });
-  it("it should post correctly with type business llc with controller info", async () => {
+  it("it should post correctly with type business llc without optionals and controller info", async () => {
     const responseBody = "some-response-body";
     const response = {
       body: responseBody
@@ -327,7 +262,7 @@ describe("Dwolla create sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createSustainer(
+    }).createVerifiedBusinessSustainer(
       {
         firstName,
         lastName,
@@ -337,7 +272,6 @@ describe("Dwolla create sustainer", () => {
         dateOfBirth,
         ssn,
         address1,
-        address2,
         city,
         state,
         postalCode,
@@ -345,8 +279,6 @@ describe("Dwolla create sustainer", () => {
         businessType: "llc",
         businessClassification,
         ein,
-        website,
-        phone,
         controller: {
           firstName: controllerFirstName,
           lastName: controllerLastName,
@@ -383,7 +315,6 @@ describe("Dwolla create sustainer", () => {
         dateOfBirth,
         ssn,
         address1,
-        address2,
         city,
         state,
         postalCode,
@@ -391,8 +322,6 @@ describe("Dwolla create sustainer", () => {
         businessType: "llc",
         businessClassification,
         ein,
-        website,
-        phone,
         controller: {
           firstName: controllerFirstName,
           lastName: controllerLastName,
@@ -430,7 +359,7 @@ describe("Dwolla create sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createSustainer(
+    }).createVerifiedBusinessSustainer(
       {
         firstName,
         lastName,
@@ -496,7 +425,7 @@ describe("Dwolla create sustainer", () => {
       { "Idempotency-Key": idempotencyKey }
     );
   });
-  it("it should post correctly with type business corporation with controller info", async () => {
+  it("it should post correctly with type business corporation without optionals and with controller info", async () => {
     const responseBody = "some-response-body";
     const response = {
       body: responseBody
@@ -510,7 +439,7 @@ describe("Dwolla create sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createSustainer(
+    }).createVerifiedBusinessSustainer(
       {
         firstName,
         lastName,
@@ -520,7 +449,6 @@ describe("Dwolla create sustainer", () => {
         dateOfBirth,
         ssn,
         address1,
-        address2,
         city,
         state,
         postalCode,
@@ -528,8 +456,6 @@ describe("Dwolla create sustainer", () => {
         businessType: "corporation",
         businessClassification,
         ein,
-        website,
-        phone,
         controller: {
           firstName: controllerFirstName,
           lastName: controllerLastName,
@@ -566,7 +492,6 @@ describe("Dwolla create sustainer", () => {
         dateOfBirth,
         ssn,
         address1,
-        address2,
         city,
         state,
         postalCode,
@@ -574,8 +499,6 @@ describe("Dwolla create sustainer", () => {
         businessType: "corporation",
         businessClassification,
         ein,
-        website,
-        phone,
         controller: {
           firstName: controllerFirstName,
           lastName: controllerLastName,
@@ -613,7 +536,7 @@ describe("Dwolla create sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createSustainer(
+    }).createVerifiedBusinessSustainer(
       {
         firstName,
         lastName,
@@ -679,107 +602,235 @@ describe("Dwolla create sustainer", () => {
       { "Idempotency-Key": idempotencyKey }
     );
   });
-  it("it should post correctly with type business partnership with controller info", async () => {
-    const responseBody = "some-response-body";
-    const response = {
-      body: responseBody
+  it("it should post correctly with 400 validation", async () => {
+    const message = "some-error-message";
+    const postError = new Error(message);
+    const errorMessage0 = "some-error";
+    const path0 = "/somePath/yep";
+    const errorMessage1 = "some-other-error";
+    const path1 = "/someOtherPath/";
+    postError.statusCode = 400;
+    postError.code = "ValidationError";
+    postError.body = {
+      _embedded: {
+        errors: [
+          { message: errorMessage0, path: path0 },
+          { message: errorMessage1, path: path1 }
+        ]
+      }
     };
-    const postFake = fake.returns(response);
+    const postFake = fake.rejects(postError);
     const dwollaClient = {
       post: postFake
     };
     const dwollaFake = fake.returns(dwollaClient);
     replace(deps, "dwolla", dwollaFake);
 
-    const result = await dwolla(key, secret, {
-      environment
-    }).createSustainer(
-      {
-        firstName,
-        lastName,
-        email,
-        ipAddress,
-        type: "business",
-        dateOfBirth,
-        ssn,
-        address1,
-        address2,
-        city,
-        state,
-        postalCode,
-        businessName,
-        businessType: "partnership",
-        businessClassification,
-        ein,
-        website,
-        phone,
-        controller: {
-          firstName: controllerFirstName,
-          lastName: controllerLastName,
-          title: controllerTitle,
-          dateOfBirth: controllerDateOfBirth,
-          ssn: controllerSsn,
-          passport: {
-            number: controllerPassportNumber,
-            country: controllerPassportCountry
-          },
-          address: {
-            address1: controllerAddress1,
-            address2: controllerAddress2,
-            city: controllerCity,
-            stateProvinceRegion: controllerStateProvinceRegion,
-            postalCode: controllerPostalCode,
-            country: controllerCountry
-          }
-        }
-      },
-      { idempotencyKey }
-    );
+    const error = new Error();
+    const errorFake = fake.returns(error);
+    replace(deps.badRequestError, "sustainerCreatingValidation", errorFake);
 
-    expect(result).to.equal(responseBody);
-    expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
-    expect(postFake).to.have.been.calledWith(
-      "customers",
-      {
-        firstName,
-        lastName,
-        email,
-        ipAddress,
-        type: "business",
-        dateOfBirth,
-        ssn,
-        address1,
-        address2,
-        city,
-        state,
-        postalCode,
-        businessName,
-        businessType: "partnership",
-        businessClassification,
-        ein,
-        website,
-        phone,
-        controller: {
-          firstName: controllerFirstName,
-          lastName: controllerLastName,
-          title: controllerTitle,
-          dateOfBirth: controllerDateOfBirth,
-          ssn: controllerSsn,
-          passport: {
-            number: controllerPassportNumber,
-            country: controllerPassportCountry
-          },
-          address: {
-            address1: controllerAddress1,
-            address2: controllerAddress2,
-            city: controllerCity,
-            stateProvinceRegion: controllerStateProvinceRegion,
-            postalCode: controllerPostalCode,
-            country: controllerCountry
-          }
-        }
-      },
-      { "Idempotency-Key": idempotencyKey }
-    );
+    try {
+      await dwolla(key, secret, {
+        environment
+      }).createVerifiedBusinessSustainer(
+        {
+          firstName,
+          lastName,
+          email,
+          ipAddress,
+          type: "business",
+          dateOfBirth,
+          ssn,
+          address1,
+          address2,
+          city,
+          state,
+          postalCode,
+          businessName,
+          businessType: "partnership",
+          businessClassification,
+          ein,
+          website,
+          phone
+        },
+        { idempotencyKey }
+      );
+
+      //shouldn't be called.
+      expect(2).to.equal(1);
+    } catch (e) {
+      expect(errorFake).to.have.been.calledWith({
+        info: {
+          errors: [
+            {
+              message: errorMessage0,
+              path: "somePath.yep"
+            },
+            {
+              message: errorMessage1,
+              path: "someOtherPath"
+            }
+          ]
+        },
+        source: postError
+      });
+      expect(e).to.equal(error);
+    }
+  });
+  it("it should post correctly with 400 default", async () => {
+    const message = "some-error-message";
+    const postError = new Error(message);
+    postError.statusCode = 400;
+    const postFake = fake.rejects(postError);
+    const dwollaClient = {
+      post: postFake
+    };
+    const dwollaFake = fake.returns(dwollaClient);
+    replace(deps, "dwolla", dwollaFake);
+
+    const error = new Error();
+    const errorFake = fake.returns(error);
+    replace(deps.badRequestError, "sustainer", errorFake);
+
+    try {
+      await dwolla(key, secret, {
+        environment
+      }).createVerifiedBusinessSustainer(
+        {
+          firstName,
+          lastName,
+          email,
+          ipAddress,
+          type: "business",
+          dateOfBirth,
+          ssn,
+          address1,
+          address2,
+          city,
+          state,
+          postalCode,
+          businessName,
+          businessType: "partnership",
+          businessClassification,
+          ein,
+          website,
+          phone
+        },
+        { idempotencyKey }
+      );
+
+      //shouldn't be called.
+      expect(2).to.equal(1);
+    } catch (e) {
+      expect(errorFake).to.have.been.calledWith({
+        info: { errors: [{ message }] },
+        source: postError
+      });
+      expect(e).to.equal(error);
+    }
+  });
+  it("it should post correctly with 403 default", async () => {
+    const message = "some-error-message";
+    const postError = new Error(message);
+    postError.statusCode = 403;
+    const postFake = fake.rejects(postError);
+    const dwollaClient = {
+      post: postFake
+    };
+    const dwollaFake = fake.returns(dwollaClient);
+    replace(deps, "dwolla", dwollaFake);
+
+    const error = new Error();
+    const errorFake = fake.returns(error);
+    replace(deps.forbiddenError, "sustainerCreating", errorFake);
+
+    try {
+      await dwolla(key, secret, {
+        environment
+      }).createVerifiedBusinessSustainer(
+        {
+          firstName,
+          lastName,
+          email,
+          ipAddress,
+          type: "business",
+          dateOfBirth,
+          ssn,
+          address1,
+          address2,
+          city,
+          state,
+          postalCode,
+          businessName,
+          businessType: "partnership",
+          businessClassification,
+          ein,
+          website,
+          phone
+        },
+        { idempotencyKey }
+      );
+
+      //shouldn't be called.
+      expect(2).to.equal(1);
+    } catch (e) {
+      expect(errorFake).to.have.been.calledWith({
+        info: { errors: [{ message }] },
+        source: postError
+      });
+      expect(e).to.equal(error);
+    }
+  });
+  it("it should post correctly with default", async () => {
+    const message = "some-error-message";
+    const postError = new Error(message);
+    const postFake = fake.rejects(postError);
+    const dwollaClient = {
+      post: postFake
+    };
+    const dwollaFake = fake.returns(dwollaClient);
+    replace(deps, "dwolla", dwollaFake);
+
+    const error = new Error();
+    const errorFake = fake.returns(error);
+    replace(deps.badRequestError, "sustainer", errorFake);
+
+    try {
+      await dwolla(key, secret, {
+        environment
+      }).createVerifiedBusinessSustainer(
+        {
+          firstName,
+          lastName,
+          email,
+          ipAddress,
+          type: "business",
+          dateOfBirth,
+          ssn,
+          address1,
+          address2,
+          city,
+          state,
+          postalCode,
+          businessName,
+          businessType: "partnership",
+          businessClassification,
+          ein,
+          website,
+          phone
+        },
+        { idempotencyKey }
+      );
+
+      //shouldn't be called.
+      expect(2).to.equal(1);
+    } catch (e) {
+      expect(errorFake).to.have.been.calledWith({
+        info: { errors: [{ message }] },
+        source: postError
+      });
+      expect(e).to.equal(error);
+    }
   });
 });

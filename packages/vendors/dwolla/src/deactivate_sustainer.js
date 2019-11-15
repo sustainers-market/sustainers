@@ -7,7 +7,7 @@ module.exports = dwolla => async (id, { idempotencyKey } = {}) => {
     const { body } = await dwolla.post(
       `customers/${id}`,
       {
-        status: "deactivate"
+        status: "deactivated"
       },
       idempotencyKey && { "Idempotency-Key": idempotencyKey }
     );

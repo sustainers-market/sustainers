@@ -12,7 +12,7 @@ module.exports = dwolla => async (id, { idempotencyKey } = {}) => {
   } catch (err) {
     switch (err.statusCode) {
     case 404:
-      throw deps.resourceNotFound.businessSustainerAuthority({
+      throw deps.resourceNotFoundError.businessSustainerAuthority({
         info: { errors: [{ message: err.message }] },
         source: err
       });

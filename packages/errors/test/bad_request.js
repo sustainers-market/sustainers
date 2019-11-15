@@ -43,6 +43,63 @@ describe("Bad request", () => {
       message: "Some information was missing when creating this account."
     });
   });
+  it("sustainerDeactivatingValidation correct", () => {
+    const error = badRequest.sustainerDeactivatingValidation();
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 400,
+      code: "BadRequest",
+      info: {},
+      message: "Some information was missing when deactivating this account."
+    });
+  });
+  it("sustainerDeactivatingValidation correct with props", () => {
+    const error = badRequest.sustainerDeactivatingValidation({ cause, info });
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 400,
+      code: "BadRequest",
+      info,
+      cause,
+      message: "Some information was missing when deactivating this account."
+    });
+  });
+  it("sustainerReactivatingValidation correct", () => {
+    const error = badRequest.sustainerDeactivatingValidation();
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 400,
+      code: "BadRequest",
+      info: {},
+      message: "Some information was missing when reactivating this account."
+    });
+  });
+  it("sustainerReactivatingValidation correct with props", () => {
+    const error = badRequest.sustainerReactivatingValidation({ cause, info });
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 400,
+      code: "BadRequest",
+      info,
+      cause,
+      message: "Some information was missing when reactivating this account."
+    });
+  });
+  it("sustainerSuspendingValidation correct", () => {
+    const error = badRequest.sustainerDeactivatingValidation();
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 400,
+      code: "BadRequest",
+      info: {},
+      message: "Some information was missing when suspending this account."
+    });
+  });
+  it("sustainerSuspendingValidation correct with props", () => {
+    const error = badRequest.sustainerSuspendingValidation({ cause, info });
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 400,
+      code: "BadRequest",
+      info,
+      cause,
+      message: "Some information was missing when suspending this account."
+    });
+  });
   it("businessSustainerAuthorityUpdatingValidation correct", () => {
     const error = badRequest.businessSustainerAuthorityUpdatingValidation();
     expect(error.toJSON()).to.deep.equal({

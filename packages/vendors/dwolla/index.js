@@ -1,7 +1,7 @@
 const deps = require("./deps");
 
 const certifyBusinessSustainerAuthority = require("./src/certify_business_sustainer_authority");
-const createBusinessSustainerAuthority = require("./src/certify_business_sustainer_authority");
+const createBusinessSustainerAuthority = require("./src/create_business_sustainer_authority");
 const createReceiveOnlySustainer = require("./src/create_receive_only_sustainer");
 const createUnverifiedSustainer = require("./src/create_unverified_sustainer");
 const createVerifiedBusinessSustainer = require("./src/create_verified_business_sustainer");
