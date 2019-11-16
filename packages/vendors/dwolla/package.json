@@ -1,6 +1,6 @@
 {
   "name": "@blossm/dwolla-payments",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Payment functionality.",
   "main": "index.js",
   "author": "blossm.network",
