@@ -65,7 +65,7 @@ describe("Dwolla suspend sustainer", () => {
         country,
         postalCode
       },
-      verificationStatus
+      verificationStatusType: verificationStatus
     });
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(getFake).to.have.been.calledWith(`beneficial-owners/${id}`, {});

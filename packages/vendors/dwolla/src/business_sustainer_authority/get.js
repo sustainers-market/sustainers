@@ -29,7 +29,7 @@ module.exports = dwolla => async id => {
         country,
         postalCode
       },
-      verificationStatus
+      verificationStatusType: verificationStatus
     };
   } catch (err) {
     switch (err.statusCode) {
