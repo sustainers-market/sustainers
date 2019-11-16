@@ -15,7 +15,7 @@ module.exports = dwolla => async (
   { idempotencyKey } = {}
 ) => {
   try {
-    const { body } = await dwolla.post(
+    const { headers } = await dwolla.post(
       `customers/${sustainerId}/beneficial-owners`,
       {
         firstName,
@@ -41,7 +41,7 @@ module.exports = dwolla => async (
       idempotencyKey && { "Idempotency-Key": idempotencyKey }
     );
 
-    return body;
+    return headers.get("location");
   } catch (err) {
     switch (err.statusCode) {
     case 400:

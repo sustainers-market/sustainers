@@ -32,9 +32,13 @@ describe("Dwolla create business sustainer authority", () => {
     restore();
   });
   it("it should post correctly", async () => {
-    const responseBody = "some-response-body";
+    const location = "some-location";
+    const getFake = fake.returns(location);
+    const responseHeaders = {
+      get: getFake
+    };
     const response = {
-      body: responseBody
+      headers: responseHeaders
     };
     const postFake = fake.returns(response);
     const dwollaClient = {
@@ -68,7 +72,7 @@ describe("Dwolla create business sustainer authority", () => {
       { idempotencyKey }
     );
 
-    expect(result).to.equal(responseBody);
+    expect(result).to.equal(location);
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(postFake).to.have.been.calledWith(
       `customers/${id}/beneficial-owners`,
@@ -94,9 +98,13 @@ describe("Dwolla create business sustainer authority", () => {
     );
   });
   it("it should post correctly without optionals", async () => {
-    const responseBody = "some-response-body";
+    const location = "some-location";
+    const getFake = fake.returns(location);
+    const responseHeaders = {
+      get: getFake
+    };
     const response = {
-      body: responseBody
+      headers: responseHeaders
     };
     const postFake = fake.returns(response);
     const dwollaClient = {
@@ -125,7 +133,7 @@ describe("Dwolla create business sustainer authority", () => {
       { idempotencyKey }
     );
 
-    expect(result).to.equal(responseBody);
+    expect(result).to.equal(location);
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(postFake).to.have.been.calledWith(
       `customers/${id}/beneficial-owners`,
