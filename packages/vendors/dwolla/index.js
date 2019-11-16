@@ -7,7 +7,8 @@ const createUnverifiedSustainer = require("./src/sustainer/create_unverified");
 const createVerifiedBusinessSustainer = require("./src/sustainer/create_verified_business");
 const createVerifiedPersonalSustainer = require("./src/sustainer/create_verified_personal");
 const deactivateSustainer = require("./src/sustainer/deactivate");
-const deleteBussinesSustainerAuthority = require("./src/business_sustainer_authority/delete");
+const deleteBusinessSustainerAuthority = require("./src/business_sustainer_authority/delete");
+const getBusinessSustainerAuthority = require("./src/business_sustainer_authority/get");
 const reactivateSustainer = require("./src/sustainer/reactivate");
 const suspendSustainer = require("./src/sustainer/suspend");
 const updateBusinessSustainerAuthority = require("./src/business_sustainer_authority/update");
@@ -18,8 +19,9 @@ module.exports = (key, secret, { environment }) => {
   const dwolla = deps.dwolla(key, secret, { environment });
   return {
     businessSustainerAuthority: {
+      get: getBusinessSustainerAuthority(dwolla),
       create: createBusinessSustainerAuthority(dwolla),
-      delete: deleteBussinesSustainerAuthority(dwolla),
+      delete: deleteBusinessSustainerAuthority(dwolla),
       update: updateBusinessSustainerAuthority(dwolla)
     },
     sustainer: {
