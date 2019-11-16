@@ -1,21 +1,13 @@
-const validationErrorInfo = require("./utils/validation_error_info");
+const validationErrorInfo = require("../utils/validation_error_info");
 
-const deps = require("../deps");
+const deps = require("../../deps");
 
-module.exports = dwolla => async (
-  { firstName, lastName, email, ipAddress, businessName },
-  { idempotencyKey } = {}
-) => {
+module.exports = dwolla => async (id, { idempotencyKey } = {}) => {
   try {
     const { body } = await dwolla.post(
-      "customers",
+      `customers/${id}`,
       {
-        firstName,
-        lastName,
-        email,
-        ipAddress,
-        type: "receive-only",
-        ...(businessName && { businessName })
+        status: "deactivated"
       },
       idempotencyKey && { "Idempotency-Key": idempotencyKey }
     );
@@ -26,7 +18,7 @@ module.exports = dwolla => async (
     case 400:
       switch (err.code) {
       case "ValidationError":
-        throw deps.badRequestError.sustainerCreatingValidation({
+        throw deps.badRequestError.sustainerDeactivatingValidation({
           info: validationErrorInfo(err),
           source: err
         });
@@ -37,7 +29,7 @@ module.exports = dwolla => async (
         });
       }
     case 403:
-      throw deps.forbiddenError.sustainerCreating({
+      throw deps.forbiddenError.sustainerDeactivating({
         info: { errors: [{ message: err.message }] },
         source: err
       });

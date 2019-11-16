@@ -1,33 +1,29 @@
 const { expect } = require("chai").use(require("sinon-chai"));
 const { restore, replace, fake } = require("sinon");
-const dwolla = require("..");
+const dwolla = require("../..");
 
-const deps = require("../deps");
+const deps = require("../../deps");
 
 const key = "some-key";
 const secret = "some-secret";
 const environment = "some-environment";
 
-const id = "some-id";
-
 const firstName = "some-first-name";
 const lastName = "some-last-name";
+const email = "some-email";
+const ipAddress = "some-ip";
 const dateOfBirth = "some-dob";
 const ssn = "some-ssn";
-
 const address1 = "some-address1";
 const address2 = "some-address2";
 const city = "some-city";
 const state = "some-state";
 const postalCode = "some-postal-code";
-const country = "some-country";
-
-const passportNumber = "some-passport-number";
-const passportCountry = "some-passport-country";
+const phone = "some-phone";
 
 const idempotencyKey = "some-idempotency-key";
 
-describe("Dwolla create business sustainer authority", () => {
+describe("Dwolla create verified business sustainer", () => {
   afterEach(() => {
     restore();
   });
@@ -45,25 +41,21 @@ describe("Dwolla create business sustainer authority", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createBusinessSustainerAuthority(
-      id,
+    }).sustainer.createVerifiedPersonal(
       {
         firstName,
         lastName,
-        ssn,
+        email,
+        ipAddress,
+        type: "personal",
         dateOfBirth,
-        address: {
-          address1,
-          address2,
-          city,
-          state,
-          postalCode,
-          country
-        },
-        passport: {
-          number: passportNumber,
-          country: passportCountry
-        }
+        ssn,
+        address1,
+        address2,
+        city,
+        state,
+        postalCode,
+        phone
       },
       { idempotencyKey }
     );
@@ -71,24 +63,21 @@ describe("Dwolla create business sustainer authority", () => {
     expect(result).to.equal(responseBody);
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(postFake).to.have.been.calledWith(
-      `customers/${id}/beneficial-owners`,
+      "customers",
       {
         firstName,
         lastName,
-        ssn,
+        email,
+        ipAddress,
+        type: "personal",
         dateOfBirth,
-        address: {
-          address1,
-          address2,
-          city,
-          stateProvinceRegion: state,
-          country,
-          postalCode
-        },
-        passport: {
-          number: passportNumber,
-          country: passportCountry
-        }
+        ssn,
+        address1,
+        address2,
+        city,
+        state,
+        postalCode,
+        phone
       },
       { "Idempotency-Key": idempotencyKey }
     );
@@ -107,20 +96,19 @@ describe("Dwolla create business sustainer authority", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createBusinessSustainerAuthority(
-      id,
+    }).sustainer.createVerifiedPersonal(
       {
         firstName,
         lastName,
-        ssn,
+        email,
+        ipAddress,
+        type: "personal",
         dateOfBirth,
-        address: {
-          address1,
-          city,
-          state,
-          postalCode,
-          country
-        }
+        ssn,
+        address1,
+        city,
+        state,
+        postalCode
       },
       { idempotencyKey }
     );
@@ -128,19 +116,19 @@ describe("Dwolla create business sustainer authority", () => {
     expect(result).to.equal(responseBody);
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(postFake).to.have.been.calledWith(
-      `customers/${id}/beneficial-owners`,
+      "customers",
       {
         firstName,
         lastName,
-        ssn,
+        email,
+        ipAddress,
+        type: "personal",
         dateOfBirth,
-        address: {
-          address1,
-          city,
-          stateProvinceRegion: state,
-          country,
-          postalCode
-        }
+        ssn,
+        address1,
+        city,
+        state,
+        postalCode
       },
       { "Idempotency-Key": idempotencyKey }
     );
@@ -171,28 +159,27 @@ describe("Dwolla create business sustainer authority", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(
-      deps.badRequestError,
-      "businessSustainerAuthorityCreatingValidation",
-      errorFake
-    );
+    replace(deps.badRequestError, "sustainerCreatingValidation", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).createBusinessSustainerAuthority(id, {
-        firstName,
-        lastName,
-        ssn,
-        dateOfBirth,
-        address: {
+      }).sustainer.createVerifiedPersonal(
+        {
+          firstName,
+          lastName,
+          email,
+          ipAddress,
+          type: "personal",
+          dateOfBirth,
+          ssn,
           address1,
           city,
           state,
-          postalCode,
-          country
-        }
-      });
+          postalCode
+        },
+        { idempotencyKey }
+      );
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -228,24 +215,27 @@ describe("Dwolla create business sustainer authority", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.badRequestError, "businessSustainerAuthority", errorFake);
+    replace(deps.badRequestError, "sustainer", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).createBusinessSustainerAuthority(id, {
-        firstName,
-        lastName,
-        ssn,
-        dateOfBirth,
-        address: {
+      }).sustainer.createVerifiedPersonal(
+        {
+          firstName,
+          lastName,
+          email,
+          ipAddress,
+          type: "personal",
+          dateOfBirth,
+          ssn,
           address1,
           city,
           state,
-          postalCode,
-          country
-        }
-      });
+          postalCode
+        },
+        { idempotencyKey }
+      );
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -270,28 +260,27 @@ describe("Dwolla create business sustainer authority", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(
-      deps.forbiddenError,
-      "businessSustainerAuthorityCreating",
-      errorFake
-    );
+    replace(deps.forbiddenError, "sustainerCreating", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).createBusinessSustainerAuthority(id, {
-        firstName,
-        lastName,
-        ssn,
-        dateOfBirth,
-        address: {
+      }).sustainer.createVerifiedPersonal(
+        {
+          firstName,
+          lastName,
+          email,
+          ipAddress,
+          type: "personal",
+          dateOfBirth,
+          ssn,
           address1,
           city,
           state,
-          postalCode,
-          country
-        }
-      });
+          postalCode
+        },
+        { idempotencyKey }
+      );
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -315,24 +304,27 @@ describe("Dwolla create business sustainer authority", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.badRequestError, "businessSustainerAuthority", errorFake);
+    replace(deps.badRequestError, "sustainer", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).createBusinessSustainerAuthority(id, {
-        firstName,
-        lastName,
-        ssn,
-        dateOfBirth,
-        address: {
+      }).sustainer.createVerifiedPersonal(
+        {
+          firstName,
+          lastName,
+          email,
+          ipAddress,
+          type: "personal",
+          dateOfBirth,
+          ssn,
           address1,
           city,
           state,
-          postalCode,
-          country
-        }
-      });
+          postalCode
+        },
+        { idempotencyKey }
+      );
 
       //shouldn't be called.
       expect(2).to.equal(1);

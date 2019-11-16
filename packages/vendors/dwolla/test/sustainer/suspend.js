@@ -1,28 +1,18 @@
 const { expect } = require("chai").use(require("sinon-chai"));
 const { restore, replace, fake } = require("sinon");
-const dwolla = require("..");
+const dwolla = require("../..");
 
-const deps = require("../deps");
+const deps = require("../../deps");
 
 const key = "some-key";
 const secret = "some-secret";
 const environment = "some-environment";
 
-const email = "some-email";
-const ipAddress = "some-ip";
-const address1 = "some-address1";
-const address2 = "some-address2";
-const city = "some-city";
-const state = "some-state";
-const postalCode = "some-postal-code";
-const phone = "some-phone";
-const website = "some-website";
-
 const id = "some-id";
 
 const idempotencyKey = "some-idempotency-key";
 
-describe("Dwolla create verified business sustainer", () => {
+describe("Dwolla suspend sustainer", () => {
   afterEach(() => {
     restore();
   });
@@ -40,63 +30,71 @@ describe("Dwolla create verified business sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).updateVerifiedSustainer(
-      id,
-      {
-        email,
-        ipAddress,
-        address1,
-        address2,
-        city,
-        state,
-        postalCode,
-        website,
-        phone
-      },
-      { idempotencyKey }
-    );
+    }).sustainer.suspend(id, { idempotencyKey });
 
     expect(result).to.equal(responseBody);
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(postFake).to.have.been.calledWith(
       `customers/${id}`,
       {
-        email,
-        ipAddress,
-        address1,
-        address2,
-        city,
-        state,
-        postalCode,
-        website,
-        phone
+        status: "suspended"
       },
       { "Idempotency-Key": idempotencyKey }
     );
   });
-  it("it should post correctly without optionals", async () => {
-    const responseBody = "some-response-body";
-    const response = {
-      body: responseBody
+  it("it should post correctly with 400 validation", async () => {
+    const message = "some-error-message";
+    const postError = new Error(message);
+    const errorMessage0 = "some-error";
+    const path0 = "/somePath/yep";
+    const errorMessage1 = "some-other-error";
+    const path1 = "/someOtherPath/";
+    postError.statusCode = 400;
+    postError.code = "ValidationError";
+    postError.body = {
+      _embedded: {
+        errors: [
+          { message: errorMessage0, path: path0 },
+          { message: errorMessage1, path: path1 }
+        ]
+      }
     };
-    const postFake = fake.returns(response);
+    const postFake = fake.rejects(postError);
     const dwollaClient = {
       post: postFake
     };
     const dwollaFake = fake.returns(dwollaClient);
     replace(deps, "dwolla", dwollaFake);
 
-    const result = await dwolla(key, secret, {
-      environment
-    }).updateVerifiedSustainer(id, {}, { idempotencyKey });
+    const error = new Error();
+    const errorFake = fake.returns(error);
+    replace(deps.badRequestError, "sustainerSuspendingValidation", errorFake);
 
-    expect(result).to.equal(responseBody);
-    expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
-    expect(postFake).to.have.been.calledWith(
-      `customers/${id}`,
-      {},
-      { "Idempotency-Key": idempotencyKey }
-    );
+    try {
+      await dwolla(key, secret, {
+        environment
+      }).sustainer.suspend(id, { idempotencyKey });
+
+      //shouldn't be called.
+      expect(2).to.equal(1);
+    } catch (e) {
+      expect(errorFake).to.have.been.calledWith({
+        info: {
+          errors: [
+            {
+              message: errorMessage0,
+              path: "somePath.yep"
+            },
+            {
+              message: errorMessage1,
+              path: "someOtherPath"
+            }
+          ]
+        },
+        source: postError
+      });
+      expect(e).to.equal(error);
+    }
   });
   it("it should post correctly with 400 default", async () => {
     const message = "some-error-message";
@@ -116,7 +114,7 @@ describe("Dwolla create verified business sustainer", () => {
     try {
       await dwolla(key, secret, {
         environment
-      }).updateVerifiedSustainer(id, {}, { idempotencyKey });
+      }).sustainer.suspend(id, { idempotencyKey });
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -141,12 +139,12 @@ describe("Dwolla create verified business sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.forbiddenError, "sustainerUpdating", errorFake);
+    replace(deps.forbiddenError, "sustainerSuspending", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).updateVerifiedSustainer(id, {}, { idempotencyKey });
+      }).sustainer.suspend(id, { idempotencyKey });
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -175,7 +173,7 @@ describe("Dwolla create verified business sustainer", () => {
     try {
       await dwolla(key, secret, {
         environment
-      }).updateVerifiedSustainer(id, {}, { idempotencyKey });
+      }).sustainer.suspend(id, { idempotencyKey });
 
       //shouldn't be called.
       expect(2).to.equal(1);

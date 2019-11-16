@@ -1,18 +1,23 @@
 const { expect } = require("chai").use(require("sinon-chai"));
 const { restore, replace, fake } = require("sinon");
-const dwolla = require("..");
+const dwolla = require("../..");
 
-const deps = require("../deps");
+const deps = require("../../deps");
 
 const key = "some-key";
 const secret = "some-secret";
 const environment = "some-environment";
 
+const firstName = "some-first-name";
+const lastName = "some-last-name";
+const email = "some-email";
+const businessName = "some-business-name";
+
 const id = "some-id";
 
 const idempotencyKey = "some-idempotency-key";
 
-describe("Dwolla reactivate sustainer", () => {
+describe("Dwolla update unverified sustainer", () => {
   afterEach(() => {
     restore();
   });
@@ -30,15 +35,51 @@ describe("Dwolla reactivate sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).reactivateSustainer(id, { idempotencyKey });
+    }).sustainer.updateUnverified(
+      id,
+      {
+        firstName,
+        lastName,
+        email,
+        businessName
+      },
+      { idempotencyKey }
+    );
 
     expect(result).to.equal(responseBody);
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(postFake).to.have.been.calledWith(
       `customers/${id}`,
       {
-        status: "reactivated"
+        firstName,
+        lastName,
+        email,
+        businessName
       },
+      { "Idempotency-Key": idempotencyKey }
+    );
+  });
+  it("it should post correctly without optionals", async () => {
+    const responseBody = "some-response-body";
+    const response = {
+      body: responseBody
+    };
+    const postFake = fake.returns(response);
+    const dwollaClient = {
+      post: postFake
+    };
+    const dwollaFake = fake.returns(dwollaClient);
+    replace(deps, "dwolla", dwollaFake);
+
+    const result = await dwolla(key, secret, {
+      environment
+    }).sustainer.updateUnverified(id, {}, { idempotencyKey });
+
+    expect(result).to.equal(responseBody);
+    expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
+    expect(postFake).to.have.been.calledWith(
+      `customers/${id}`,
+      {},
       { "Idempotency-Key": idempotencyKey }
     );
   });
@@ -68,12 +109,12 @@ describe("Dwolla reactivate sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.badRequestError, "sustainerReactivatingValidation", errorFake);
+    replace(deps.badRequestError, "sustainerUpdatingValidation", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).reactivateSustainer(id, { idempotencyKey });
+      }).sustainer.updateUnverified(id, {}, { idempotencyKey });
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -114,7 +155,7 @@ describe("Dwolla reactivate sustainer", () => {
     try {
       await dwolla(key, secret, {
         environment
-      }).reactivateSustainer(id, { idempotencyKey });
+      }).sustainer.updateUnverified(id, {}, { idempotencyKey });
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -139,12 +180,12 @@ describe("Dwolla reactivate sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.forbiddenError, "sustainerReactivating", errorFake);
+    replace(deps.forbiddenError, "sustainerUpdating", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).reactivateSustainer(id, { idempotencyKey });
+      }).sustainer.updateUnverified(id, {}, { idempotencyKey });
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -173,7 +214,7 @@ describe("Dwolla reactivate sustainer", () => {
     try {
       await dwolla(key, secret, {
         environment
-      }).reactivateSustainer(id, { idempotencyKey });
+      }).sustainer.updateUnverified(id, {}, { idempotencyKey });
 
       //shouldn't be called.
       expect(2).to.equal(1);

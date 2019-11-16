@@ -1,29 +1,33 @@
 const { expect } = require("chai").use(require("sinon-chai"));
 const { restore, replace, fake } = require("sinon");
-const dwolla = require("..");
+const dwolla = require("../..");
 
-const deps = require("../deps");
+const deps = require("../../deps");
 
 const key = "some-key";
 const secret = "some-secret";
 const environment = "some-environment";
 
+const id = "some-id";
+
 const firstName = "some-first-name";
 const lastName = "some-last-name";
-const email = "some-email";
-const ipAddress = "some-ip";
 const dateOfBirth = "some-dob";
 const ssn = "some-ssn";
+
 const address1 = "some-address1";
 const address2 = "some-address2";
 const city = "some-city";
 const state = "some-state";
 const postalCode = "some-postal-code";
-const phone = "some-phone";
+const country = "some-country";
+
+const passportNumber = "some-passport-number";
+const passportCountry = "some-passport-country";
 
 const idempotencyKey = "some-idempotency-key";
 
-describe("Dwolla create verified business sustainer", () => {
+describe("Dwolla create business sustainer authority", () => {
   afterEach(() => {
     restore();
   });
@@ -41,21 +45,25 @@ describe("Dwolla create verified business sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createVerifiedPersonalSustainer(
+    }).businessSustainerAuthority.create(
+      id,
       {
         firstName,
         lastName,
-        email,
-        ipAddress,
-        type: "personal",
-        dateOfBirth,
         ssn,
-        address1,
-        address2,
-        city,
-        state,
-        postalCode,
-        phone
+        dateOfBirth,
+        address: {
+          address1,
+          address2,
+          city,
+          state,
+          postalCode,
+          country
+        },
+        passport: {
+          number: passportNumber,
+          country: passportCountry
+        }
       },
       { idempotencyKey }
     );
@@ -63,21 +71,24 @@ describe("Dwolla create verified business sustainer", () => {
     expect(result).to.equal(responseBody);
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(postFake).to.have.been.calledWith(
-      "customers",
+      `customers/${id}/beneficial-owners`,
       {
         firstName,
         lastName,
-        email,
-        ipAddress,
-        type: "personal",
-        dateOfBirth,
         ssn,
-        address1,
-        address2,
-        city,
-        state,
-        postalCode,
-        phone
+        dateOfBirth,
+        address: {
+          address1,
+          address2,
+          city,
+          stateProvinceRegion: state,
+          country,
+          postalCode
+        },
+        passport: {
+          number: passportNumber,
+          country: passportCountry
+        }
       },
       { "Idempotency-Key": idempotencyKey }
     );
@@ -96,19 +107,20 @@ describe("Dwolla create verified business sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createVerifiedPersonalSustainer(
+    }).businessSustainerAuthority.create(
+      id,
       {
         firstName,
         lastName,
-        email,
-        ipAddress,
-        type: "personal",
-        dateOfBirth,
         ssn,
-        address1,
-        city,
-        state,
-        postalCode
+        dateOfBirth,
+        address: {
+          address1,
+          city,
+          state,
+          postalCode,
+          country
+        }
       },
       { idempotencyKey }
     );
@@ -116,19 +128,19 @@ describe("Dwolla create verified business sustainer", () => {
     expect(result).to.equal(responseBody);
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(postFake).to.have.been.calledWith(
-      "customers",
+      `customers/${id}/beneficial-owners`,
       {
         firstName,
         lastName,
-        email,
-        ipAddress,
-        type: "personal",
-        dateOfBirth,
         ssn,
-        address1,
-        city,
-        state,
-        postalCode
+        dateOfBirth,
+        address: {
+          address1,
+          city,
+          stateProvinceRegion: state,
+          country,
+          postalCode
+        }
       },
       { "Idempotency-Key": idempotencyKey }
     );
@@ -159,27 +171,28 @@ describe("Dwolla create verified business sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.badRequestError, "sustainerCreatingValidation", errorFake);
+    replace(
+      deps.badRequestError,
+      "businessSustainerAuthorityCreatingValidation",
+      errorFake
+    );
 
     try {
       await dwolla(key, secret, {
         environment
-      }).createVerifiedPersonalSustainer(
-        {
-          firstName,
-          lastName,
-          email,
-          ipAddress,
-          type: "personal",
-          dateOfBirth,
-          ssn,
+      }).businessSustainerAuthority.create(id, {
+        firstName,
+        lastName,
+        ssn,
+        dateOfBirth,
+        address: {
           address1,
           city,
           state,
-          postalCode
-        },
-        { idempotencyKey }
-      );
+          postalCode,
+          country
+        }
+      });
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -215,27 +228,24 @@ describe("Dwolla create verified business sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.badRequestError, "sustainer", errorFake);
+    replace(deps.badRequestError, "businessSustainerAuthority", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).createVerifiedPersonalSustainer(
-        {
-          firstName,
-          lastName,
-          email,
-          ipAddress,
-          type: "personal",
-          dateOfBirth,
-          ssn,
+      }).businessSustainerAuthority.create(id, {
+        firstName,
+        lastName,
+        ssn,
+        dateOfBirth,
+        address: {
           address1,
           city,
           state,
-          postalCode
-        },
-        { idempotencyKey }
-      );
+          postalCode,
+          country
+        }
+      });
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -260,27 +270,28 @@ describe("Dwolla create verified business sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.forbiddenError, "sustainerCreating", errorFake);
+    replace(
+      deps.forbiddenError,
+      "businessSustainerAuthorityCreating",
+      errorFake
+    );
 
     try {
       await dwolla(key, secret, {
         environment
-      }).createVerifiedPersonalSustainer(
-        {
-          firstName,
-          lastName,
-          email,
-          ipAddress,
-          type: "personal",
-          dateOfBirth,
-          ssn,
+      }).businessSustainerAuthority.create(id, {
+        firstName,
+        lastName,
+        ssn,
+        dateOfBirth,
+        address: {
           address1,
           city,
           state,
-          postalCode
-        },
-        { idempotencyKey }
-      );
+          postalCode,
+          country
+        }
+      });
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -304,27 +315,24 @@ describe("Dwolla create verified business sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.badRequestError, "sustainer", errorFake);
+    replace(deps.badRequestError, "businessSustainerAuthority", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).createVerifiedPersonalSustainer(
-        {
-          firstName,
-          lastName,
-          email,
-          ipAddress,
-          type: "personal",
-          dateOfBirth,
-          ssn,
+      }).businessSustainerAuthority.create(id, {
+        firstName,
+        lastName,
+        ssn,
+        dateOfBirth,
+        address: {
           address1,
           city,
           state,
-          postalCode
-        },
-        { idempotencyKey }
-      );
+          postalCode,
+          country
+        }
+      });
 
       //shouldn't be called.
       expect(2).to.equal(1);

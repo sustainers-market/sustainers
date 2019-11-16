@@ -1,22 +1,33 @@
 const { expect } = require("chai").use(require("sinon-chai"));
 const { restore, replace, fake } = require("sinon");
-const dwolla = require("..");
+const dwolla = require("../..");
 
-const deps = require("../deps");
+const deps = require("../../deps");
 
 const key = "some-key";
 const secret = "some-secret";
 const environment = "some-environment";
 
+const id = "some-id";
+
 const firstName = "some-first-name";
 const lastName = "some-last-name";
-const email = "some-email";
-const ipAddress = "some-ip";
-const businessName = "some-business-name";
+const dateOfBirth = "some-dob";
+const ssn = "some-ssn";
+
+const address1 = "some-address1";
+const address2 = "some-address2";
+const city = "some-city";
+const state = "some-state";
+const postalCode = "some-postal-code";
+const country = "some-country";
+
+const passportNumber = "some-passport-number";
+const passportCountry = "some-passport-country";
 
 const idempotencyKey = "some-idempotency-key";
 
-describe("Dwolla create unverified sustainer", () => {
+describe("Dwolla update business sustainer authority", () => {
   afterEach(() => {
     restore();
   });
@@ -34,13 +45,25 @@ describe("Dwolla create unverified sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createUnverifiedSustainer(
+    }).businessSustainerAuthority.update(
+      id,
       {
         firstName,
         lastName,
-        email,
-        ipAddress,
-        businessName
+        ssn,
+        dateOfBirth,
+        address: {
+          address1,
+          address2,
+          city,
+          state,
+          postalCode,
+          country
+        },
+        passport: {
+          number: passportNumber,
+          country: passportCountry
+        }
       },
       { idempotencyKey }
     );
@@ -48,13 +71,24 @@ describe("Dwolla create unverified sustainer", () => {
     expect(result).to.equal(responseBody);
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(postFake).to.have.been.calledWith(
-      "customers",
+      `beneficial-owners/${id}`,
       {
         firstName,
         lastName,
-        email,
-        ipAddress,
-        businessName
+        ssn,
+        dateOfBirth,
+        address: {
+          address1,
+          address2,
+          city,
+          stateProvinceRegion: state,
+          country,
+          postalCode
+        },
+        passport: {
+          number: passportNumber,
+          country: passportCountry
+        }
       },
       { "Idempotency-Key": idempotencyKey }
     );
@@ -73,12 +107,20 @@ describe("Dwolla create unverified sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createUnverifiedSustainer(
+    }).businessSustainerAuthority.update(
+      id,
       {
         firstName,
         lastName,
-        email,
-        ipAddress
+        ssn,
+        dateOfBirth,
+        address: {
+          address1,
+          city,
+          state,
+          postalCode,
+          country
+        }
       },
       { idempotencyKey }
     );
@@ -86,12 +128,19 @@ describe("Dwolla create unverified sustainer", () => {
     expect(result).to.equal(responseBody);
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(postFake).to.have.been.calledWith(
-      "customers",
+      `beneficial-owners/${id}`,
       {
         firstName,
         lastName,
-        email,
-        ipAddress
+        ssn,
+        dateOfBirth,
+        address: {
+          address1,
+          city,
+          stateProvinceRegion: state,
+          country,
+          postalCode
+        }
       },
       { "Idempotency-Key": idempotencyKey }
     );
@@ -122,17 +171,29 @@ describe("Dwolla create unverified sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.badRequestError, "sustainerCreatingValidation", errorFake);
+    replace(
+      deps.badRequestError,
+      "businessSustainerAuthorityUpdatingValidation",
+      errorFake
+    );
 
     try {
       await dwolla(key, secret, {
         environment
-      }).createUnverifiedSustainer(
+      }).businessSustainerAuthority.update(
+        id,
         {
           firstName,
           lastName,
-          email,
-          ipAddress
+          ssn,
+          dateOfBirth,
+          address: {
+            address1,
+            city,
+            state,
+            postalCode,
+            country
+          }
         },
         { idempotencyKey }
       );
@@ -171,17 +232,25 @@ describe("Dwolla create unverified sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.badRequestError, "sustainer", errorFake);
+    replace(deps.badRequestError, "businessSustainerAuthority", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).createUnverifiedSustainer(
+      }).businessSustainerAuthority.update(
+        id,
         {
           firstName,
           lastName,
-          email,
-          ipAddress
+          ssn,
+          dateOfBirth,
+          address: {
+            address1,
+            city,
+            state,
+            postalCode,
+            country
+          }
         },
         { idempotencyKey }
       );
@@ -209,17 +278,29 @@ describe("Dwolla create unverified sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.forbiddenError, "sustainerCreating", errorFake);
+    replace(
+      deps.forbiddenError,
+      "businessSustainerAuthorityUpdating",
+      errorFake
+    );
 
     try {
       await dwolla(key, secret, {
         environment
-      }).createUnverifiedSustainer(
+      }).businessSustainerAuthority.update(
+        id,
         {
           firstName,
           lastName,
-          email,
-          ipAddress
+          ssn,
+          dateOfBirth,
+          address: {
+            address1,
+            city,
+            state,
+            postalCode,
+            country
+          }
         },
         { idempotencyKey }
       );
@@ -246,17 +327,25 @@ describe("Dwolla create unverified sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.badRequestError, "sustainer", errorFake);
+    replace(deps.badRequestError, "businessSustainerAuthority", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).createUnverifiedSustainer(
+      }).businessSustainerAuthority.update(
+        id,
         {
           firstName,
           lastName,
-          email,
-          ipAddress
+          ssn,
+          dateOfBirth,
+          address: {
+            address1,
+            city,
+            state,
+            postalCode,
+            country
+          }
         },
         { idempotencyKey }
       );

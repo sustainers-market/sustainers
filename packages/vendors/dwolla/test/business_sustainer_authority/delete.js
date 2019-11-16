@@ -1,8 +1,8 @@
 const { expect } = require("chai").use(require("sinon-chai"));
 const { restore, replace, fake } = require("sinon");
-const dwolla = require("..");
+const dwolla = require("../..");
 
-const deps = require("../deps");
+const deps = require("../../deps");
 
 const key = "some-key";
 const secret = "some-secret";
@@ -12,7 +12,7 @@ const id = "some-id";
 
 const idempotencyKey = "some-idempotency-key";
 
-describe("Dwolla certify business sustainer authority", () => {
+describe("Dwolla suspend sustainer", () => {
   afterEach(() => {
     restore();
   });
@@ -21,34 +21,34 @@ describe("Dwolla certify business sustainer authority", () => {
     const response = {
       body: responseBody
     };
-    const postFake = fake.returns(response);
+    const deleteFake = fake.returns(response);
     const dwollaClient = {
-      post: postFake
+      delete: deleteFake
     };
     const dwollaFake = fake.returns(dwollaClient);
     replace(deps, "dwolla", dwollaFake);
 
     const result = await dwolla(key, secret, {
       environment
-    }).certifyBusinessSustainerAuthority(id, { idempotencyKey });
+    }).businessSustainerAuthority.delete(id, { idempotencyKey });
 
     expect(result).to.equal(responseBody);
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
-    expect(postFake).to.have.been.calledWith(
-      `customers/${id}/beneficial-ownership`,
+    expect(deleteFake).to.have.been.calledWith(
+      `beneficial-owners/${id}`,
+      {},
       {
-        status: "certified"
-      },
-      { "Idempotency-Key": idempotencyKey }
+        "Idempotency-Key": idempotencyKey
+      }
     );
   });
   it("it should post correctly with 404", async () => {
     const message = "some-error-message";
-    const postError = new Error(message);
-    postError.statusCode = 404;
-    const postFake = fake.rejects(postError);
+    const deleteError = new Error(message);
+    deleteError.statusCode = 404;
+    const deleteFake = fake.rejects(deleteError);
     const dwollaClient = {
-      post: postFake
+      delete: deleteFake
     };
     const dwollaFake = fake.returns(dwollaClient);
     replace(deps, "dwolla", dwollaFake);
@@ -64,24 +64,24 @@ describe("Dwolla certify business sustainer authority", () => {
     try {
       await dwolla(key, secret, {
         environment
-      }).certifyBusinessSustainerAuthority(id, { idempotencyKey });
+      }).businessSustainerAuthority.delete(id, { idempotencyKey });
 
       //shouldn't be called.
       expect(2).to.equal(1);
     } catch (e) {
       expect(errorFake).to.have.been.calledWith({
         info: { errors: [{ message }] },
-        source: postError
+        source: deleteError
       });
       expect(e).to.equal(error);
     }
   });
-  it("it should post correctly with default err", async () => {
+  it("it should post correctly with default", async () => {
     const message = "some-error-message";
-    const postError = new Error(message);
-    const postFake = fake.rejects(postError);
+    const deleteError = new Error(message);
+    const deleteFake = fake.rejects(deleteError);
     const dwollaClient = {
-      post: postFake
+      delete: deleteFake
     };
     const dwollaFake = fake.returns(dwollaClient);
     replace(deps, "dwolla", dwollaFake);
@@ -93,14 +93,14 @@ describe("Dwolla certify business sustainer authority", () => {
     try {
       await dwolla(key, secret, {
         environment
-      }).certifyBusinessSustainerAuthority(id, { idempotencyKey });
+      }).businessSustainerAuthority.delete(id, { idempotencyKey });
 
       //shouldn't be called.
       expect(2).to.equal(1);
     } catch (e) {
       expect(errorFake).to.have.been.calledWith({
         info: { errors: [{ message }] },
-        source: postError
+        source: deleteError
       });
       expect(e).to.equal(error);
     }

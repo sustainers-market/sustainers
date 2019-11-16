@@ -1,8 +1,8 @@
 const { expect } = require("chai").use(require("sinon-chai"));
 const { restore, replace, fake } = require("sinon");
-const dwolla = require("..");
+const dwolla = require("../..");
 
-const deps = require("../deps");
+const deps = require("../../deps");
 
 const key = "some-key";
 const secret = "some-secret";
@@ -60,7 +60,7 @@ describe("Dwolla create verified business sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createVerifiedBusinessSustainer(
+    }).sustainer.createVerifiedBusiness(
       {
         firstName,
         lastName,
@@ -125,7 +125,7 @@ describe("Dwolla create verified business sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createVerifiedBusinessSustainer(
+    }).sustainer.createVerifiedBusiness(
       {
         firstName,
         lastName,
@@ -182,7 +182,7 @@ describe("Dwolla create verified business sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createVerifiedBusinessSustainer(
+    }).sustainer.createVerifiedBusiness(
       {
         firstName,
         lastName,
@@ -262,7 +262,7 @@ describe("Dwolla create verified business sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createVerifiedBusinessSustainer(
+    }).sustainer.createVerifiedBusiness(
       {
         firstName,
         lastName,
@@ -359,7 +359,7 @@ describe("Dwolla create verified business sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createVerifiedBusinessSustainer(
+    }).sustainer.createVerifiedBusiness(
       {
         firstName,
         lastName,
@@ -439,7 +439,7 @@ describe("Dwolla create verified business sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createVerifiedBusinessSustainer(
+    }).sustainer.createVerifiedBusiness(
       {
         firstName,
         lastName,
@@ -536,7 +536,7 @@ describe("Dwolla create verified business sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).createVerifiedBusinessSustainer(
+    }).sustainer.createVerifiedBusiness(
       {
         firstName,
         lastName,
@@ -633,7 +633,7 @@ describe("Dwolla create verified business sustainer", () => {
     try {
       await dwolla(key, secret, {
         environment
-      }).createVerifiedBusinessSustainer(
+      }).sustainer.createVerifiedBusiness(
         {
           firstName,
           lastName,
@@ -696,7 +696,7 @@ describe("Dwolla create verified business sustainer", () => {
     try {
       await dwolla(key, secret, {
         environment
-      }).createVerifiedBusinessSustainer(
+      }).sustainer.createVerifiedBusiness(
         {
           firstName,
           lastName,
@@ -748,7 +748,7 @@ describe("Dwolla create verified business sustainer", () => {
     try {
       await dwolla(key, secret, {
         environment
-      }).createVerifiedBusinessSustainer(
+      }).sustainer.createVerifiedBusiness(
         {
           firstName,
           lastName,
@@ -799,7 +799,7 @@ describe("Dwolla create verified business sustainer", () => {
     try {
       await dwolla(key, secret, {
         environment
-      }).createVerifiedBusinessSustainer(
+      }).sustainer.createVerifiedBusiness(
         {
           firstName,
           lastName,

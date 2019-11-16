@@ -1,10 +1,12 @@
-const deps = require("../deps");
+const deps = require("../../deps");
 
 module.exports = dwolla => async (id, { idempotencyKey } = {}) => {
   try {
-    const { body } = await dwolla.delete(
-      `beneficial-owners/${id}`,
-      {},
+    const { body } = await dwolla.post(
+      `customers/${id}/beneficial-ownership`,
+      {
+        status: "certified"
+      },
       idempotencyKey && { "Idempotency-Key": idempotencyKey }
     );
 

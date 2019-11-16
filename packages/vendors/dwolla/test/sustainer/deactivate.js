@@ -1,8 +1,8 @@
 const { expect } = require("chai").use(require("sinon-chai"));
 const { restore, replace, fake } = require("sinon");
-const dwolla = require("..");
+const dwolla = require("../..");
 
-const deps = require("../deps");
+const deps = require("../../deps");
 
 const key = "some-key";
 const secret = "some-secret";
@@ -12,7 +12,7 @@ const id = "some-id";
 
 const idempotencyKey = "some-idempotency-key";
 
-describe("Dwolla suspend sustainer", () => {
+describe("Dwolla deactivate sustainer", () => {
   afterEach(() => {
     restore();
   });
@@ -30,14 +30,14 @@ describe("Dwolla suspend sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).suspendSustainer(id, { idempotencyKey });
+    }).sustainer.deactivate(id, { idempotencyKey });
 
     expect(result).to.equal(responseBody);
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(postFake).to.have.been.calledWith(
       `customers/${id}`,
       {
-        status: "suspended"
+        status: "deactivated"
       },
       { "Idempotency-Key": idempotencyKey }
     );
@@ -68,12 +68,12 @@ describe("Dwolla suspend sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.badRequestError, "sustainerSuspendingValidation", errorFake);
+    replace(deps.badRequestError, "sustainerDeactivatingValidation", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).suspendSustainer(id, { idempotencyKey });
+      }).sustainer.deactivate(id, { idempotencyKey });
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -114,7 +114,7 @@ describe("Dwolla suspend sustainer", () => {
     try {
       await dwolla(key, secret, {
         environment
-      }).suspendSustainer(id, { idempotencyKey });
+      }).sustainer.deactivate(id, { idempotencyKey });
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -139,12 +139,12 @@ describe("Dwolla suspend sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.forbiddenError, "sustainerSuspending", errorFake);
+    replace(deps.forbiddenError, "sustainerDeactivating", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).suspendSustainer(id, { idempotencyKey });
+      }).sustainer.deactivate(id, { idempotencyKey });
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -173,7 +173,7 @@ describe("Dwolla suspend sustainer", () => {
     try {
       await dwolla(key, secret, {
         environment
-      }).suspendSustainer(id, { idempotencyKey });
+      }).sustainer.deactivate(id, { idempotencyKey });
 
       //shouldn't be called.
       expect(2).to.equal(1);
