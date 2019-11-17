@@ -1,9 +1,9 @@
 {
-  "name": "@blossm/dwolla-payments",
-  "version": "0.0.6",
+  "name": "@sustainers/dwolla",
+  "version": "0.0.0",
   "description": "Payment functionality.",
   "main": "index.js",
-  "author": "blossm.network",
+  "author": "sustainers.market",
   "engines": {
     "node": ">= 10.16.0"
   },
