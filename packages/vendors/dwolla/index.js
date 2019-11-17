@@ -2,6 +2,8 @@ const deps = require("./deps");
 
 const certifySustainerBusinessAuthority = require("./src/sustainer/certify_business_authority");
 const createBusinessSustainerAuthority = require("./src/business_sustainer_authority/create");
+const createBusinessSustainerAuthorityDocument = require("./src/business_sustainer_authority/create_document");
+const createSustainerDocument = require("./src/sustainer/create_document");
 const createReceiveOnlySustainer = require("./src/sustainer/create_receive_only");
 const createUnverifiedSustainer = require("./src/sustainer/create_unverified");
 const createVerifiedBusinessSustainer = require("./src/sustainer/create_verified_business");
@@ -22,7 +24,8 @@ module.exports = (key, secret, { environment }) => {
       get: getBusinessSustainerAuthority(dwolla),
       create: createBusinessSustainerAuthority(dwolla),
       delete: deleteBusinessSustainerAuthority(dwolla),
-      update: updateBusinessSustainerAuthority(dwolla)
+      update: updateBusinessSustainerAuthority(dwolla),
+      createDocument: createBusinessSustainerAuthorityDocument(dwolla)
     },
     sustainer: {
       certifyBusinessAuthority: certifySustainerBusinessAuthority(dwolla),
@@ -34,7 +37,8 @@ module.exports = (key, secret, { environment }) => {
       reactivate: reactivateSustainer(dwolla),
       suspend: suspendSustainer(dwolla),
       updateUnverified: updateUnverifiedSustainer(dwolla),
-      updateVerified: updateVerifiedSustainer(dwolla)
+      updateVerified: updateVerifiedSustainer(dwolla),
+      createDocument: createSustainerDocument(dwolla)
     }
   };
 };

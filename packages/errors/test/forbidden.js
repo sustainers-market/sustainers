@@ -43,6 +43,28 @@ describe("Forbidden", () => {
       message: "You aren't allowed to create this account."
     });
   });
+  it("sustainerDocumentCreating correct", () => {
+    const error = forbidden.sustainerDocumentCreating();
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 403,
+      code: "Forbidden",
+      info: {},
+      message: "You aren't allowed to create a document for this account."
+    });
+  });
+  it("sustainerDocumentCreating correct with props", () => {
+    const error = forbidden.sustainerDocumentCreating({
+      cause,
+      info
+    });
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 403,
+      code: "Forbidden",
+      info,
+      cause,
+      message: "You aren't allowed to create a document for this account."
+    });
+  });
   it("sustainerReactivating correct", () => {
     const error = forbidden.sustainerReactivating();
     expect(error.toJSON()).to.deep.equal({
@@ -144,6 +166,29 @@ describe("Forbidden", () => {
       info,
       cause,
       message: "You aren't allowed to create this authority."
+    });
+  });
+
+  it("businessSustainerAuthorityDocumentCreating correct", () => {
+    const error = forbidden.businessSustainerAuthorityDocumentCreating();
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 403,
+      code: "Forbidden",
+      info: {},
+      message: "You aren't allowed to create a document for this authority."
+    });
+  });
+  it("businessSustainerAuthorityDocumentCreating correct with props", () => {
+    const error = forbidden.businessSustainerAuthorityDocumentCreating({
+      cause,
+      info
+    });
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 403,
+      code: "Forbidden",
+      info,
+      cause,
+      message: "You aren't allowed to create a document for this authority."
     });
   });
 });

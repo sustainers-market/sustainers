@@ -41,6 +41,14 @@ module.exports = {
         info
       }
     ),
+  sustainerDocumentCreatingValidation: ({ cause, info } = {}) =>
+    badRequest.message(
+      "Some information was missing when creating a document for this account.",
+      {
+        cause,
+        info
+      }
+    ),
   businessSustainerAuthorityUpdatingValidation: ({ cause, info } = {}) =>
     badRequest.message(
       "Some information was missing when updating this authority.",
@@ -52,6 +60,17 @@ module.exports = {
   businessSustainerAuthorityCreatingValidation: ({ cause, info } = {}) =>
     badRequest.message(
       "Some information was missing when creating this authority.",
+      {
+        cause,
+        info
+      }
+    ),
+  businessSustainerAuthorityDocumentCreatingValidation: ({
+    cause,
+    info
+  } = {}) =>
+    badRequest.message(
+      "Some information was missing when creating a document for this authority.",
       {
         cause,
         info

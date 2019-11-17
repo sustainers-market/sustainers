@@ -11,6 +11,9 @@ exports.dwolla = (key, secret, { environment }) =>
     environment
   });
 
+const FormData = require("form-data");
+
 exports.badRequestError = badRequest;
 exports.forbiddenError = forbidden;
 exports.resourceNotFoundError = resourceNotFound;
+exports.FormData = FormData;

@@ -43,6 +43,30 @@ describe("Bad request", () => {
       message: "Some information was missing when creating this account."
     });
   });
+  it("sustainerDocumentCreatingValidation correct", () => {
+    const error = badRequest.sustainerDocumentCreatingValidation();
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 400,
+      code: "BadRequest",
+      info: {},
+      message:
+        "Some information was missing when creating a document for this account."
+    });
+  });
+  it("sustainerDocumentCreatingValidation correct with props", () => {
+    const error = badRequest.sustainerDocumentCreatingValidation({
+      cause,
+      info
+    });
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 400,
+      code: "BadRequest",
+      info,
+      cause,
+      message:
+        "Some information was missing when creating a document for this account."
+    });
+  });
   it("sustainerDeactivatingValidation correct", () => {
     const error = badRequest.sustainerDeactivatingValidation();
     expect(error.toJSON()).to.deep.equal({
@@ -142,6 +166,32 @@ describe("Bad request", () => {
       info,
       cause,
       message: "Some information was missing when creating this authority."
+    });
+  });
+  it("businessSustainerAuthorityDocumentCreatingValidation correct", () => {
+    const error = badRequest.businessSustainerAuthorityDocumentCreatingValidation();
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 400,
+      code: "BadRequest",
+      info: {},
+      message:
+        "Some information was missing when creating a document for this authority."
+    });
+  });
+  it("businessSustainerAuthorityDocumentCreatingValidation correct with props", () => {
+    const error = badRequest.businessSustainerAuthorityDocumentCreatingValidation(
+      {
+        cause,
+        info
+      }
+    );
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 400,
+      code: "BadRequest",
+      info,
+      cause,
+      message:
+        "Some information was missing when creating a document for this authority."
     });
   });
   it("sustainer correct", () => {

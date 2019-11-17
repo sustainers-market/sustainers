@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "@sustainers/errors": "^0.0.14",
-    "dwolla-v2": "^3.1.0"
+    "dwolla-v2": "^3.1.0",
+    "form-data": "3.0.x"
   },
   "devDependencies": {
     "chai": "^4.2.0",

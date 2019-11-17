@@ -17,11 +17,7 @@ describe("Dwolla certify business sustainer authority", () => {
     restore();
   });
   it("it should post correctly", async () => {
-    const responseBody = "some-response-body";
-    const response = {
-      body: responseBody
-    };
-    const postFake = fake.returns(response);
+    const postFake = fake();
     const dwollaClient = {
       post: postFake
     };
@@ -32,7 +28,8 @@ describe("Dwolla certify business sustainer authority", () => {
       environment
     }).sustainer.certifyBusinessAuthority(id, { idempotencyKey });
 
-    expect(result).to.equal(responseBody);
+    expect(result).to.be.undefined;
+    expect(postFake).to.have.been.calledOnce;
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(postFake).to.have.been.calledWith(
       `customers/${id}/beneficial-ownership`,

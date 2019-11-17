@@ -27,12 +27,35 @@ const passportCountry = "some-passport-country";
 
 const idempotencyKey = "some-idempotency-key";
 
+const updatedFirstName = "some-updated-first-name";
+const updatedLastName = "some-updated-last-name";
+const updatedAddress1 = "some-updated-address-1";
+const updatedAddress2 = "some-updated-address-2";
+const updatedCity = "some-updated-city";
+const updatedStateProvinceRegion = "some-updated-state";
+const updatedCountry = "some-updated-country";
+const updatedPostalCode = "some-updated-postal-code";
+
+const updatedVerificationStatus = "some-updated-verification-status";
+
 describe("Dwolla update business sustainer authority", () => {
   afterEach(() => {
     restore();
   });
   it("it should post correctly", async () => {
-    const responseBody = "some-response-body";
+    const responseBody = {
+      firstName: updatedFirstName,
+      lastName: updatedLastName,
+      address: {
+        address1: updatedAddress1,
+        address2: updatedAddress2,
+        city: updatedCity,
+        stateProvinceRegion: updatedStateProvinceRegion,
+        country: updatedCountry,
+        postalCode: updatedPostalCode
+      },
+      verificationStatus: updatedVerificationStatus
+    };
     const response = {
       body: responseBody
     };
@@ -68,7 +91,19 @@ describe("Dwolla update business sustainer authority", () => {
       { idempotencyKey }
     );
 
-    expect(result).to.equal(responseBody);
+    expect(result).to.deep.equal({
+      firstName: updatedFirstName,
+      lastName: updatedLastName,
+      address: {
+        address1: updatedAddress1,
+        address2: updatedAddress2,
+        city: updatedCity,
+        state: updatedStateProvinceRegion,
+        country: updatedCountry,
+        postalCode: updatedPostalCode
+      },
+      verificationStatusType: updatedVerificationStatus
+    });
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(postFake).to.have.been.calledWith(
       `beneficial-owners/${id}`,
@@ -94,7 +129,19 @@ describe("Dwolla update business sustainer authority", () => {
     );
   });
   it("it should post correctly without optionals", async () => {
-    const responseBody = "some-response-body";
+    const responseBody = {
+      firstName: updatedFirstName,
+      lastName: updatedLastName,
+      address: {
+        address1: updatedAddress1,
+        address2: updatedAddress2,
+        city: updatedCity,
+        stateProvinceRegion: updatedStateProvinceRegion,
+        country: updatedCountry,
+        postalCode: updatedPostalCode
+      },
+      verificationStatus: updatedVerificationStatus
+    };
     const response = {
       body: responseBody
     };
@@ -125,7 +172,19 @@ describe("Dwolla update business sustainer authority", () => {
       { idempotencyKey }
     );
 
-    expect(result).to.equal(responseBody);
+    expect(result).to.deep.equal({
+      firstName: updatedFirstName,
+      lastName: updatedLastName,
+      address: {
+        address1: updatedAddress1,
+        address2: updatedAddress2,
+        city: updatedCity,
+        state: updatedStateProvinceRegion,
+        country: updatedCountry,
+        postalCode: updatedPostalCode
+      },
+      verificationStatusType: updatedVerificationStatus
+    });
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
     expect(postFake).to.have.been.calledWith(
       `beneficial-owners/${id}`,

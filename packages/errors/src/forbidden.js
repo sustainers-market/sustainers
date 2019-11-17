@@ -11,6 +11,14 @@ module.exports = {
       cause,
       info
     }),
+  sustainerDocumentCreating: ({ cause, info } = {}) =>
+    forbidden.message(
+      "You aren't allowed to create a document for this account.",
+      {
+        cause,
+        info
+      }
+    ),
   sustainerSuspending: ({ cause, info } = {}) =>
     forbidden.message("You aren't allowed to suspend this account.", {
       cause,
@@ -31,6 +39,14 @@ module.exports = {
       cause,
       info
     }),
+  businessSustainerAuthorityDocumentCreating: ({ cause, info } = {}) =>
+    forbidden.message(
+      "You aren't allowed to create a document for this authority.",
+      {
+        cause,
+        info
+      }
+    ),
   businessSustainerAuthorityCreating: ({ cause, info } = {}) =>
     forbidden.message("You aren't allowed to create this authority.", {
       cause,
