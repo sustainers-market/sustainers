@@ -4,12 +4,14 @@ const {
   resourceNotFound
 } = require("@sustainers/errors");
 
-exports.dwolla = (key, secret, { environment }) =>
-  new require("dwolla-v2").Client({
+exports.dwolla = (key, secret, { environment }) => {
+  const Client = require("dwolla-v2").Client;
+  return new Client({
     key,
     secret,
     environment
   });
+};
 
 const FormData = require("form-data");
 
