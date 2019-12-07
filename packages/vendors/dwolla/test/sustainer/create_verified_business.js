@@ -75,7 +75,7 @@ describe("Dwolla create verified business sustainer", () => {
         state,
         postalCode,
         businessName,
-        businessType: "soleProprietorship",
+        businessType: "soleproprietorship",
         businessClassification,
         ein,
         website,
@@ -102,7 +102,7 @@ describe("Dwolla create verified business sustainer", () => {
         state,
         postalCode,
         businessName,
-        businessType: "soleProprietorship",
+        businessType: "soleproprietorship",
         businessClassification,
         ein,
         website,
@@ -139,7 +139,7 @@ describe("Dwolla create verified business sustainer", () => {
         state,
         postalCode,
         businessName,
-        businessType: "soleProprietorship",
+        businessType: "soleproprietorship",
         businessClassification
       },
       { idempotencyKey }
@@ -162,7 +162,7 @@ describe("Dwolla create verified business sustainer", () => {
         state,
         postalCode,
         businessName,
-        businessType: "soleProprietorship",
+        businessType: "soleproprietorship",
         businessClassification
       },
       { "Idempotency-Key": idempotencyKey }

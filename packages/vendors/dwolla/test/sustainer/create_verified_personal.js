@@ -23,7 +23,7 @@ const phone = "some-phone";
 
 const idempotencyKey = "some-idempotency-key";
 
-describe("Dwolla create verified business sustainer", () => {
+describe("Dwolla create verified personal sustainer", () => {
   afterEach(() => {
     restore();
   });

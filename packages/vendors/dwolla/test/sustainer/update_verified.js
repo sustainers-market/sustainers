@@ -22,7 +22,7 @@ const id = "some-id";
 
 const idempotencyKey = "some-idempotency-key";
 
-describe("Dwolla create verified business sustainer", () => {
+describe("Dwolla update verified", () => {
   afterEach(() => {
     restore();
   });
