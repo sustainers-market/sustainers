@@ -1,6 +1,6 @@
 {
   "name": "@sustainers/errors",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "A library of errors that can be thrown by the market.",
   "main": "index.js",
   "author": "sustainers.market",

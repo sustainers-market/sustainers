@@ -1,6 +1,6 @@
 {
   "name": "@sustainers/dwolla",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Payment functionality.",
   "main": "index.js",
   "author": "sustainers.market",
@@ -14,7 +14,7 @@
     "test": "mocha --recursive"
   },
   "dependencies": {
-    "@sustainers/errors": "^0.0.15",
+    "@sustainers/errors": "^0.0.16",
     "dwolla-v2": "^3.1.0",
     "form-data": "3.0.x"
   },
