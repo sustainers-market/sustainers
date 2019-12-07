@@ -24,4 +24,23 @@ describe("Resource not found", () => {
       message: "This authority wasn't found."
     });
   });
+  it("sustainer correct", () => {
+    const error = resourceNotFound.sustainer();
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 404,
+      code: "ResourceNotFound",
+      info: {},
+      message: "This sustainer wasn't found."
+    });
+  });
+  it("sustainer correct with props", () => {
+    const error = resourceNotFound.sustainer({ cause, info });
+    expect(error.toJSON()).to.deep.equal({
+      statusCode: 404,
+      code: "ResourceNotFound",
+      info,
+      cause,
+      message: "This sustainer wasn't found."
+    });
+  });
 });

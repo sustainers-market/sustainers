@@ -10,34 +10,15 @@ const environment = "some-environment";
 
 const id = "some-id";
 
-const firstName = "some-first-name";
-const lastName = "some-last-name";
-const verificationStatus = "some-verification-status";
+const status = "some-verification-status";
 
-const address1 = "some-address-1";
-const address2 = "some-address-2";
-const city = "some-city";
-const stateProvinceRegion = "some-state";
-const country = "some-country";
-const postalCode = "some-postal-code";
-
-describe("Dwolla get sustainer", () => {
+describe("Dwolla get business authority status", () => {
   afterEach(() => {
     restore();
   });
   it("it should get correctly", async () => {
     const responseBody = {
-      firstName,
-      lastName,
-      address: {
-        address1,
-        address2,
-        city,
-        stateProvinceRegion,
-        country,
-        postalCode
-      },
-      verificationStatus
+      status
     };
 
     const response = {
@@ -52,23 +33,13 @@ describe("Dwolla get sustainer", () => {
 
     const result = await dwolla(key, secret, {
       environment
-    }).businessSustainerAuthority.get(id);
+    }).sustainer.getBusinessAuthorityStatus(id);
 
     expect(result).to.deep.equal({
-      firstName,
-      lastName,
-      address: {
-        address1,
-        address2,
-        city,
-        state: stateProvinceRegion,
-        country,
-        postalCode
-      },
-      verificationStatusType: verificationStatus
+      status
     });
     expect(dwollaFake).to.have.been.calledWith(key, secret, { environment });
-    expect(getFake).to.have.been.calledWith(`beneficial-owners/${id}`, {});
+    expect(getFake).to.have.been.calledWith(`customers/${id}/beneficial-ownership`, {});
   });
   it("it should get correctly with 404", async () => {
     const message = "some-error-message";
@@ -83,12 +54,12 @@ describe("Dwolla get sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.resourceNotFoundError, "businessSustainerAuthority", errorFake);
+    replace(deps.resourceNotFoundError, "sustainer", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).businessSustainerAuthority.get(id);
+      }).sustainer.getBusinessAuthorityStatus(id);
 
       //shouldn't be called.
       expect(2).to.equal(1);
@@ -112,12 +83,12 @@ describe("Dwolla get sustainer", () => {
 
     const error = new Error();
     const errorFake = fake.returns(error);
-    replace(deps.badRequestError, "businessSustainerAuthority", errorFake);
+    replace(deps.badRequestError, "sustainer", errorFake);
 
     try {
       await dwolla(key, secret, {
         environment
-      }).businessSustainerAuthority.get(id);
+      }).sustainer.getBusinessAuthorityStatus(id);
 
       //shouldn't be called.
       expect(2).to.equal(1);

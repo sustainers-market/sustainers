@@ -16,6 +16,7 @@ const suspendSustainer = require("./src/sustainer/suspend");
 const updateBusinessSustainerAuthority = require("./src/business_sustainer_authority/update");
 const updateUnverifiedSustainer = require("./src/sustainer/update_unverified");
 const updateVerifiedSustainer = require("./src/sustainer/update_verified");
+const getSustainerBusinessAuthorityStatus = require("./src/sustainer/get_business_authority_status");
 
 module.exports = (key, secret, { environment }) => {
   const dwolla = deps.dwolla(key, secret, { environment });
@@ -38,7 +39,8 @@ module.exports = (key, secret, { environment }) => {
       suspend: suspendSustainer(dwolla),
       updateUnverified: updateUnverifiedSustainer(dwolla),
       updateVerified: updateVerifiedSustainer(dwolla),
-      createDocument: createSustainerDocument(dwolla)
+      createDocument: createSustainerDocument(dwolla),
+      getBusinessAuthorityStatus: getSustainerBusinessAuthorityStatus(dwolla)
     }
   };
 };
